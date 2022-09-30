@@ -1,0 +1,6 @@
+[submodule "backend/microservices/appcodes"]
+	path = backend/microservices/appcodes
+	url = https://github.com/LiangZuoting/MyAppCodes.git
+[submodule "backend/httpapi/rabbitmqconfig"]
+	path = backend/httpapi/rabbitmqconfig
+	url = https://github.com/LiangZuoting/MyRabbitMQ.git
