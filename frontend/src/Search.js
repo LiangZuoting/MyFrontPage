@@ -31,9 +31,9 @@ export default function Search() {
     }
 
     return (
-        <div style={{margin: "50px"}}>
+        <div style={{margin: "50px 200px 0 200px"}}>
             <Input size={"large"} placeholder={"Search Something..."} allowClear onChange={handleChange} onPressEnter={handleEnter} />
-            <div style={{float: "right", marginTop: "2px"}}>
+            <div style={{textAlign: "right", marginTop: "2px"}}>
                 <Space>
                     <Button onClick={google}>Google</Button>
                     <Button onClick={bing}>Bing</Button>

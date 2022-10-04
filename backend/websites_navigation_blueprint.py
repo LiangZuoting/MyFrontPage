@@ -14,6 +14,14 @@ async def on_server_start(app):
     await app.ctx.db.commit()
 
 
+@websites_bp.get('/')
+async def get_all(request):
+    async with request.app.ctx.db.execute('select * from websites') as cursor:
+        rows = await cursor_to_rows(cursor)
+        return json({'ret': 0, 'data': rows})
+    return json({'ret': 500})
+
+
 @websites_bp.get('/topmost')
 async def get_topmost(request):
     async with request.app.ctx.db.execute('select * from websites where topmost = 1') as cursor:

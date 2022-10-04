@@ -30,7 +30,7 @@ function TopMost() {
     }
 
     function handleClick(e) {
-        const website = data.data.find(item => item.uuid === e.target.parentNode.dataset.uuid);
+        const website = data.data.find(item => item.uuid === e.currentTarget.parentNode.dataset.uuid);
         window.open(website.url, "_blank");
     }
 
@@ -64,7 +64,7 @@ function TopMost() {
             return;
         }
         setNeedUpdate(false);
-        fetch('/api/websitesnavigation/topmost').then(response => response.json()).then(data => {
+        fetch('/api/websitesnavigation').then(response => response.json()).then(data => {
             setData(data);
         });
     }, [needUpdate]);
@@ -75,7 +75,7 @@ function TopMost() {
 
     return (
         <>
-            <div style={{margin: "0 50px 10px 50px", textAlign: "left"}}>
+            <div style={{margin: "50px 200px 0 200px", textAlign: "left"}}>
                 <Button onClick={handleAdd}>添加</Button>
                 {
                     data.data.map((item, index) => <Dropdown.Button
