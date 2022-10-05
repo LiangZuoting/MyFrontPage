@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {Space} from "antd";
 
 function Location(props) {
-    return <div style={{height: "fit-content", margin: "auto 0"}}>
+    return <div style={{height: "fit-content", margin: "auto 10px auto 0"}}>
         {
             `${props.province} ${props.city} ${props.area}`
         }

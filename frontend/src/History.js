@@ -10,12 +10,12 @@ export default function History() {
     }, []);
 
     return (
-      <div style={{margin: "50px 200px 0 200px", textAlign: "left"}}>
+      <div style={{margin: "50px 200px 0 200px"}}>
           <h2>历史上的今天</h2>
           {
               data && data.data.map((item, index) => (
                   <div key={index} style={{display: "inline"}}>
-                      <div>
+                      <div style={{fontWeight: "bold"}}>
                           {item.title}
                       </div>
                       <div>

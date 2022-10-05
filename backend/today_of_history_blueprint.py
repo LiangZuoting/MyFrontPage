@@ -22,5 +22,6 @@ async def get_history_of_today(_request):
             return json({'ret': r.status_code})
         j = r.json()
         if 'showapi_res_body' in j:
+            history_bp.ctx.update_time = date.today()
             return json({'ret': 0, 'data': j['showapi_res_body']['list'][:5]})
     return json({'ret': 500})

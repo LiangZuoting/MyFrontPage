@@ -3,6 +3,7 @@ import Search from "./Search";
 import Weather from "./Weather";
 import Websites from "./Websites";
 import History from "./History";
+import News from "./News";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Search />
         <Websites />
         <History />
+        <News />
     </div>
   );
 }

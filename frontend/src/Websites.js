@@ -75,7 +75,7 @@ function TopMost() {
 
     return (
         <>
-            <div style={{margin: "50px 200px 0 200px", textAlign: "left"}}>
+            <div>
                 <Button onClick={handleAdd}>添加</Button>
                 {
                     data.data.map((item, index) => <Dropdown.Button
@@ -120,7 +120,8 @@ function TopMost() {
 
 export default function Websites() {
     return (
-        <div>
+        <div style={{margin: "50px 200px 0 200px"}}>
+            <h2>网址导航</h2>
             <TopMost />
         </div>
     );
