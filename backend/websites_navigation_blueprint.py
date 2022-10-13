@@ -7,7 +7,7 @@ websites_bp = Blueprint('WebsitesNavigation', url_prefix='/websitesnavigation')
 
 
 @websites_bp.before_server_start
-async def on_server_start(app):
+async def on_server_start(app, loop):
     app.ctx.db = await aiosqlite.connect('../db/myfrontpage.db')
     app.ctx.db.row_factory = aiosqlite.Row
     await app.ctx.db.execute('create table if not exists websites(uuid text primary key, name text, url text, tag text, topmost integer)')
