@@ -36,6 +36,7 @@ function WebsiteButton(props) {
 function TopMost() {
     const [data, setData] = useState(null);
     const [tags, setTags] = useState([]);
+    const [filteredTags, setFilteredTags] = useState([]);
     const [needUpdate, setNeedUpdate] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalMode, setModalMode] = useState(ModalMode.Add);
@@ -65,8 +66,9 @@ function TopMost() {
 
     function handleOk() {
         form.validateFields().then(values => {
-            if (!tags.find(item => item.value === values.tag)) {
-                setTags([...tags, {label: values.tag, value: values.tag}]);
+            if (!tags.find(values.tag)) {
+                setTags([...tags, values.tag]);
+                setFilteredTags([...filteredTags, {label: values.tag, value: values.tag}]);
             }
             fetch(modalMode === ModalMode.Add ? '/api/websitesnavigation' : `/api/websitesnavigation/${editingWebsite.uuid}`, {
                 headers: {
@@ -85,10 +87,15 @@ function TopMost() {
         setModalVisible(false);
     }
 
+    function handleTagInputChange(value) {
+        setFilteredTags(tags.filter(tag => tag.toLowerCase().includes(value.toLowerCase())).map(tag => ({label: tag, value: tag})));
+    }
+
     useEffect(() => {
         fetch("/api/websitesnavigation/tags").then(rsp => rsp.json()).then(data => {
             if (data.ret === 0) {
-                setTags(data.data.map(tag => ({label: tag.tag, value: tag.tag})));
+                setTags(data.data.map(tag => tag.tag));
+                setFilteredTags(data.data.map(tag => ({label: tag.tag, value: tag.tag})));
             }
         });
     }, []);
@@ -119,9 +126,9 @@ function TopMost() {
             {
                 tags.map(tag => (
                     <div key={tag} style={{marginTop: "20px"}}>
-                        <h3 style={{display: "inline-block", width: "100px"}}>{tag.value}</h3>
+                        <h3 style={{display: "inline-block", width: "100px"}}>{tag}</h3>
                         {
-                            data.data.filter(item => item.tag === tag.value).map(item => (
+                            data.data.filter(item => item.tag === tag).map(item => (
                                 <WebsiteButton key={item.uuid} website={item} onMenuClick={handleMenuClick}/>
                             ))
                         }
@@ -137,7 +144,7 @@ function TopMost() {
                         <Input />
                     </Form.Item>
                     <Form.Item preserve={false} name={"tag"} label={"分类"} rules={[{required: false}]}>
-                        <AutoComplete options={tags}>
+                        <AutoComplete options={filteredTags} onChange={handleTagInputChange}>
                             <Input/>
                         </AutoComplete>
                     </Form.Item>
