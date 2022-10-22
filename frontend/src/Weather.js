@@ -60,7 +60,7 @@ export default function Weather() {
         });
     }, []);
 
-    if (!data || data.ret !== 0) {
+    if (!data || data.ret !== 0 || !data.data) {
         return <div></div>;
     }
     return (

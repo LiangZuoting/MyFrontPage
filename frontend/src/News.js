@@ -9,6 +9,9 @@ function ChannelNews({news}) {
 }
 
 function Channel({channel}) {
+    if (!channel.data) {
+        return <div></div>;
+    }
     return (
         <div>
             <h3>{channel.channel}</h3>
@@ -30,7 +33,7 @@ export default function News() {
         });
     }, []);
 
-    if (!data || data.ret) {
+    if (!data || data.ret || !data.data) {
         return <div></div>;
     }
 

@@ -9,11 +9,15 @@ export default function History() {
         });
     }, []);
 
+    if (!data || !data.data) {
+        return <div></div>;
+    }
+
     return (
       <div style={{margin: "50px 200px 0 200px"}}>
           <h2>历史上的今天</h2>
           {
-              data && data.data.map((item, index) => (
+              data.data.map((item, index) => (
                   <div key={index} style={{display: "inline"}}>
                       <div style={{fontWeight: "bold"}}>
                           {item.title}
