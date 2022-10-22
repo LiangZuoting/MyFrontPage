@@ -66,7 +66,7 @@ function TopMost() {
 
     function handleOk() {
         form.validateFields().then(values => {
-            if (!tags.find(values.tag)) {
+            if (!tags.find(item => item.toLowerCase() === values.tag.toLowerCase())) {
                 setTags([...tags, values.tag]);
                 setFilteredTags([...filteredTags, {label: values.tag, value: values.tag}]);
             }
@@ -81,10 +81,12 @@ function TopMost() {
                 setNeedUpdate(values.topmost);
             });
         });
+        setFilteredTags(tags.map(tag => ({label: tag, value: tag})));
     }
 
     function handleCancel() {
         setModalVisible(false);
+        setFilteredTags(tags.map(tag => ({label: tag, value: tag})));
     }
 
     function handleTagInputChange(value) {
@@ -120,7 +122,7 @@ function TopMost() {
             <div>
                 <Button onClick={handleAdd}>添加</Button>
                 {
-                    data.data.map(item => <WebsiteButton key={item.uuid} website={item} onMenuClick={handleMenuClick}/>)
+                    data.data.filter(item => item.topmost).map(item => <WebsiteButton key={item.uuid} website={item} onMenuClick={handleMenuClick}/>)
                 }
             </div>
             {

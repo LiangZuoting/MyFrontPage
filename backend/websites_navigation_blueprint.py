@@ -32,7 +32,7 @@ async def get_topmost(request):
 
 @websites_bp.get('/tags')
 async def get_tags(request):
-    async with request.app.ctx.db.execute('select tag from websites where tag is not null and tag != "None" group by tag') as cursor:
+    async with request.app.ctx.db.execute('select tag from websites where tag is not null and tag != "None" and tag != "" group by tag') as cursor:
         rows = []
         async for r in cursor:
             rows.append({'tag': r['tag']})
