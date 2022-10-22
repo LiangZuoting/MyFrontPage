@@ -32,7 +32,7 @@ async def get_topmost(request):
 
 @websites_bp.get('/tags')
 async def get_tags(request):
-    async with request.app.ctx.db.execute('select tag from websites group by tag') as cursor:
+    async with request.app.ctx.db.execute('select tag from websites where tag is not null and tag != "None" group by tag') as cursor:
         rows = []
         async for r in cursor:
             rows.append({'tag': r['tag']})
@@ -85,7 +85,7 @@ async def update_website(request, _uuid: str):
 async def cursor_to_rows(cursor):
     rows = []
     async for r in cursor:
-        rows.append({'uuid': r['uuid'], 'name': r['name'], 'url': r['url'], 'topmost': r['topmost']})
+        rows.append({'uuid': r['uuid'], 'name': r['name'], 'url': r['url'], 'tag': r['tag'], 'topmost': r['topmost']})
     return rows
 
 
