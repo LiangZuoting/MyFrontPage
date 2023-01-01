@@ -17,3 +17,5 @@
 4. 历史上的今天
 
 5. 热门新闻
+
+[新浪新闻首页-排行](https://news.sina.com.cn/hotnews/)，F12 发现有免费 API。
