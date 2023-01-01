@@ -38,6 +38,11 @@ function DayWeather(props) {
 }
 
 function LocationWeather(props) {
+    if (props.ret !== 0) {
+        return (
+            <div></div>
+        );
+    }
     return (
         <div style={{display: "flex", width: "fit-content", margin: "10px auto 0 auto"}}>
             <Location {...props.data.location}/>

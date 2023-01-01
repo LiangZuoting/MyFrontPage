@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 function ChannelNews({news}) {
     return (
         <div style={{display: "inline", marginRight: "20px"}}>
-            <a href={news.weburl} target={"_blank"}>{`${news.src}: ${news.title}`}</a>
+            <a href={news.url} target={"_blank"}>{`${news.media}: ${news.title}`}</a>
         </div>
     );
 }
