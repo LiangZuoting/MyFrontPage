@@ -38,8 +38,8 @@ async def get_news_by_channel(channel):
         r = await client.get(url)
         if r.status_code != 200:
             return {'ret': r.status_code}
-        text = r.text.removeprefix('var data = ')
-        text = text.removesuffix(';\n')
+        text = r.text.replace('var data = ', '')
+        text = text.replace(';\n', '')
         j = json.loads(text)
         return {'ret': 0, 'channel': channel, 'data': j['data']}
     return {'ret': 500}
