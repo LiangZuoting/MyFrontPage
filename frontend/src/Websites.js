@@ -1,13 +1,42 @@
 import {useEffect, useState} from "react";
-import {Button, Dropdown, Form, Input, Menu, Modal, Switch} from "antd";
+import {AutoComplete, Button, Dropdown, Form, Input, Menu, Modal, Switch} from "antd";
 
 const ModalMode = {
   Add: 0,
   Update: 1
 };
 
+function WebsiteButton(props) {
+
+    function handleClick() {
+        window.open(props.website.url, "_blank");
+    }
+
+    return (
+        <Dropdown.Button
+            data-uuid={props.website.uuid}
+            onClick={handleClick}
+            overlay={<Menu onClick={props.onMenuClick}
+                           data-uuid={props.website.uuid}
+                           items={[
+                               {
+                                   key: "delete",
+                                   label: "删除"
+                               },
+                               {
+                                   key: "update",
+                                   label: "修改"
+                               }
+                           ]}/>}>
+            {props.website.name}
+        </Dropdown.Button>
+    );
+}
+
 function TopMost() {
     const [data, setData] = useState(null);
+    const [tags, setTags] = useState([]);
+    const [filteredTags, setFilteredTags] = useState([]);
     const [needUpdate, setNeedUpdate] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalMode, setModalMode] = useState(ModalMode.Add);
@@ -29,11 +58,6 @@ function TopMost() {
         }
     }
 
-    function handleClick(e) {
-        const website = data.data.find(item => item.uuid === e.currentTarget.parentNode.dataset.uuid);
-        window.open(website.url, "_blank");
-    }
-
     function handleAdd() {
         form.setFieldsValue({name: "", url: "", tag: "", topmost: false});
         setModalMode(ModalMode.Add);
@@ -42,6 +66,10 @@ function TopMost() {
 
     function handleOk() {
         form.validateFields().then(values => {
+            if (!tags.find(item => item.toLowerCase() === values.tag.toLowerCase())) {
+                setTags([...tags, values.tag]);
+                setFilteredTags([...filteredTags, {label: values.tag, value: values.tag}]);
+            }
             fetch(modalMode === ModalMode.Add ? '/api/websitesnavigation' : `/api/websitesnavigation/${editingWebsite.uuid}`, {
                 headers: {
                     "Content-Type": "application/json"
@@ -53,11 +81,26 @@ function TopMost() {
                 setNeedUpdate(values.topmost);
             });
         });
+        setFilteredTags(tags.map(tag => ({label: tag, value: tag})));
     }
 
     function handleCancel() {
         setModalVisible(false);
+        setFilteredTags(tags.map(tag => ({label: tag, value: tag})));
     }
+
+    function handleTagInputChange(value) {
+        setFilteredTags(tags.filter(tag => tag.toLowerCase().includes(value.toLowerCase())).map(tag => ({label: tag, value: tag})));
+    }
+
+    useEffect(() => {
+        fetch("/api/websitesnavigation/tags").then(rsp => rsp.json()).then(data => {
+            if (data.ret === 0) {
+                setTags(data.data.map(tag => tag.tag));
+                setFilteredTags(data.data.map(tag => ({label: tag.tag, value: tag.tag})));
+            }
+        });
+    }, []);
 
     useEffect(() => {
         if (!needUpdate) {
@@ -65,6 +108,7 @@ function TopMost() {
         }
         setNeedUpdate(false);
         fetch('/api/websitesnavigation').then(response => response.json()).then(data => {
+
             setData(data);
         });
     }, [needUpdate]);
@@ -78,26 +122,21 @@ function TopMost() {
             <div>
                 <Button onClick={handleAdd}>添加</Button>
                 {
-                    data.data.map((item, index) => <Dropdown.Button
-                        key={`${item.uuid}-${index}`}
-                        data-uuid={item.uuid}
-                        onClick={handleClick}
-                        overlay={<Menu onClick={handleMenuClick}
-                           data-uuid={item.uuid}
-                           items={[
-                               {
-                                   key: "delete",
-                                   label: "删除"
-                               },
-                               {
-                                   key: "update",
-                                   label: "修改"
-                               }
-                           ]}/>}>
-                        {item.name}
-                    </Dropdown.Button>)
+                    data.data.filter(item => item.topmost).map(item => <WebsiteButton key={item.uuid} website={item} onMenuClick={handleMenuClick}/>)
                 }
             </div>
+            {
+                tags.map(tag => (
+                    <div key={tag} style={{marginTop: "20px"}}>
+                        <h3 style={{display: "inline-block", width: "100px"}}>{tag}</h3>
+                        {
+                            data.data.filter(item => item.tag === tag).map(item => (
+                                <WebsiteButton key={item.uuid} website={item} onMenuClick={handleMenuClick}/>
+                            ))
+                        }
+                    </div>
+                ))
+            }
             <Modal destroyOnClose={true} title={modalMode === ModalMode.Add ? "添加网址" : "更新网址"} open={modalVisible} onOk={handleOk} onCancel={handleCancel}>
                 <Form preserve={false} form={form} labelCol={{span: 4}} wrapperCol={{span: 20}}>
                     <Form.Item preserve={false} name={"name"} label={"网站名称"} rules={[{required: true}]}>
@@ -107,7 +146,9 @@ function TopMost() {
                         <Input />
                     </Form.Item>
                     <Form.Item preserve={false} name={"tag"} label={"分类"} rules={[{required: false}]}>
-                        <Input />
+                        <AutoComplete options={filteredTags} onChange={handleTagInputChange}>
+                            <Input/>
+                        </AutoComplete>
                     </Form.Item>
                     <Form.Item preserve={false} name={"topmost"} label={"常用"} valuePropName={"checked"}>
                         <Switch />
