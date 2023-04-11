@@ -1,30 +1,41 @@
 import os.path
 
+import aiosqlite
+import openai
+import sanic
 from sanic import Sanic, Blueprint
 from sanic.response import file, empty
 
+from chatgpt_blueprint import gpt_bp
 from news_blueprint import news_bp
-from today_of_history_blueprint import history_bp
 from weather_forecast_blueprint import weather_bp
 from websites_navigation_blueprint import websites_bp
 
 app = Sanic('FrontPage')
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 app.static('/', root + '/frontend/build/index.html', name='index')
+app.static('/static', root + '/frontend/build/static', name='static')
 app.static('/manifest.json', root + '/frontend/build/manifest.json', name='manifest')
 app.static('/favicon.ico', root + '/frontend/build/favicon.ico', name='favicon')
 app.static('/logo192.png', root + '/frontend/build/logo192.png', name='logo192')
-bp_group = Blueprint.group(weather_bp, websites_bp, history_bp, news_bp, url_prefix='/api')
+app.static('/logo512.png', root + '/frontend/build/logo512.png', name='logo512')
+
+
+@app.get('/chatgpt')
+async def get_chatgpt_page(_request):
+    return await sanic.file(f'{root}/frontend/build/index.html')
+
+
+@app.before_server_start
+async def worker_start(_app):
+    openai.api_key = os.getenv('OPENAPI_KEY')
+    app.ctx.db = await aiosqlite.connect('../db/myfrontpage.db')
+    app.ctx.db.row_factory = aiosqlite.Row
+
+
+bp_group = Blueprint.group(weather_bp, websites_bp, news_bp, gpt_bp, url_prefix='/api')
 app.blueprint(bp_group)
 
 
-@app.get('/static/<filepath:path>')
-async def get_static(_request, filepath):
-    f = f'{root}/frontend/build/static/{filepath}'
-    if os.path.exists(f):
-        return await file(f, headers={'cache-control': 'public, 31536000'})
-    return empty(status=404)
-
-
 if __name__ == '__main__':
-    app.run(access_log=True)
+    app.run(port=8002, access_log=True)

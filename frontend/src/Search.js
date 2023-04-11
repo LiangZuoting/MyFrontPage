@@ -21,6 +21,10 @@ export default function Search() {
         window.open("https://www.github.com/search?q=" + encodeURIComponent(text), "_blank");
     }
 
+    function chatGPT() {
+        document.location.assign(`/chatgpt?question=${encodeURIComponent(text)}`);
+    }
+
     function handleChange(e) {
         setText(e.target.value);
     }
@@ -39,6 +43,7 @@ export default function Search() {
                     <Button onClick={bing}>Bing</Button>
                     <Button onClick={baidu}>Baidu</Button>
                     <Button onClick={github}>Github</Button>
+                    <Button onClick={chatGPT}>ChatGPT</Button>
                 </Space>
             </div>
         </div>

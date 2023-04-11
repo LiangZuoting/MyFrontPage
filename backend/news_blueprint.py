@@ -3,8 +3,6 @@ import json
 import httpx
 from sanic import Blueprint, response
 
-from appcodes.appcodes import ALIYUN_APPCODE
-
 news_bp = Blueprint('News', url_prefix='/news')
 news_bp.ctx.update_time = datetime.now()
 news_bp.ctx.cached_news = None
