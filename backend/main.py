@@ -4,11 +4,9 @@ import aiosqlite
 import openai
 import sanic
 from sanic import Sanic, Blueprint
-from sanic.response import file, empty
 
 from chatgpt_blueprint import gpt_bp
 from news_blueprint import news_bp
-from weather_forecast_blueprint import weather_bp
 from websites_navigation_blueprint import websites_bp
 
 app = Sanic('FrontPage')
@@ -33,7 +31,7 @@ async def worker_start(_app):
     app.ctx.db.row_factory = aiosqlite.Row
 
 
-bp_group = Blueprint.group(weather_bp, websites_bp, news_bp, gpt_bp, url_prefix='/api')
+bp_group = Blueprint.group(websites_bp, news_bp, gpt_bp, url_prefix='/api')
 app.blueprint(bp_group)
 
 
