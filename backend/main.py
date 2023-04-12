@@ -36,4 +36,4 @@ app.blueprint(bp_group)
 
 
 if __name__ == '__main__':
-    app.run(port=8002, access_log=True)
+    app.run(port=8000)
