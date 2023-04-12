@@ -19,7 +19,6 @@ async def worker_start(app):
 @gpt_bp.get('/answer')
 async def get_answer(request):
     question = request.args.get('question')
-    question = urllib.parse.unquote(question)
     try:
         resp = await openai.Completion.acreate(model='text-davinci-003', prompt=question, n=1, temperature=0.6, max_tokens=3072)
     except OpenAIError as e:

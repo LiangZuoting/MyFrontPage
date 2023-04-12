@@ -66,14 +66,14 @@ export default function ChatGPTQA() {
 
     return (
         <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column'}}>
-            <div>
+            <div style={{fontWeight: "bold", fontSize: '1.2em', marginBottom: "10px"}}>
                 {question ? `问题：${question}` : ""}
             </div>
-            <div id={"code-container"} style={{flex: 1}}>
+            <div id={"code-container"} style={{flex: 1, background: "ghostwhite", border: "2px solid darkgray", marginBottom: "10px"}}>
             </div>
             <div style={{width: '100%', display: "flex"}}>
                 <Input placeholder={'输入问题'} value={inputValue} onChange={e => setInputValue(e.target.value)} onPressEnter={() => { setSearchParams({question: encodeURIComponent(inputValue)}); }} />
-                <Button disabled={asking} onClick={() => { setSearchParams({question: encodeURIComponent(inputValue)}); }}>
+                <Button type={"primary"} loading={asking} onClick={() => { setSearchParams({question: encodeURIComponent(inputValue)}); }}>
                     发问
                 </Button>
             </div>
