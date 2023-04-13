@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Button, List} from "antd";
+import {Button, List, Space} from "antd";
 import {Link} from "react-router-dom";
 
 export default function ChatGPTList() {
@@ -27,9 +27,12 @@ export default function ChatGPTList() {
                     </Link>
                 </List.Item>
             )} />
-            <Button onClick={() => { setRefresh(true); }}>
-                刷新
-            </Button>
+            <Space>
+                <Button onClick={() => { setRefresh(true); }}>
+                    刷新
+                </Button>
+                <Link to={'/'}>返回首页</Link>
+            </Space>
         </div>
     );
 }
