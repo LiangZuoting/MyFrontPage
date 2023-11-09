@@ -1,11 +1,11 @@
 import base64
+import os
 import time
-import urllib.parse
 import uuid
 
 import openai
 import sanic
-from openai import OpenAIError
+from openai import OpenAIError, OpenAI
 from sanic import Blueprint
 
 gpt_bp = Blueprint('ChatGPT', url_prefix='/chatgpt')
@@ -15,16 +15,14 @@ gpt_bp = Blueprint('ChatGPT', url_prefix='/chatgpt')
 async def worker_start(app):
     await app.ctx.db.execute('create table if not exists chatgpt_history (uuid text primary key, question text, answer text, time real)')
     await app.ctx.db.commit()
+    app.ctx.gpt = OpenAI(api_key=os.getenv('OPENAPI_KEY'))
 
 
 @gpt_bp.get('/answer')
 async def get_answer(request):
     question = request.args.get('question')
-    try:
-        resp = await openai.Completion.acreate(model='text-davinci-003', prompt=question, n=1, temperature=0.6, max_tokens=3072)
-    except OpenAIError as e:
-        return sanic.json({'ret': 500, 'desc': e.user_message})
-    answer = resp.choices[0].text
+    completion = request.app.ctx.gpt.chat.completions.create(model='gpt-3.5-turbo-16k', messages=[{'role': 'user', 'content': question}], max_tokens=3072)
+    answer = completion.choices[0].message
     db = request.app.ctx.db
     await db.execute(f"insert into chatgpt_history values ('{uuid.uuid4().hex}', '{base64_encode(question)}', '{base64_encode(answer)}', {time.time()})")
     await db.commit()

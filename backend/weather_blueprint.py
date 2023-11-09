@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import os
 import time
 
@@ -62,11 +63,12 @@ async def get_forecast():
 
 
 def get_weather(data):
-    weather = data['main']
+    weather = data['weather'][0]
+    main = data['main']
     wind = data['wind']
-    return {'temp': temp_str(weather['temp']), 'temp_min': temp_str(weather['temp_min']),
-            'temp_max': temp_str(weather['temp_max']),
-            'humidity': percentage_str(weather['humidity']), 'wind_speed': speed_str(wind['speed']),
+    return {'weather': weather['main'], 'weather_desc': weather['description'], 'temp': temp_str(main['temp']), 'temp_min': temp_str(main['temp_min']),
+            'temp_max': temp_str(main['temp_max']),
+            'humidity': percentage_str(main['humidity']), 'wind_speed': speed_str(wind['speed']),
             'wind_direction': direction_str(wind['deg']), 'time': time_str(data['dt'])}
 
 

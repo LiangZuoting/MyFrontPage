@@ -1,7 +1,6 @@
 import os.path
 
 import aiosqlite
-import openai
 import sanic
 from sanic import Sanic, Blueprint
 
@@ -27,7 +26,6 @@ async def get_chatgpt_page(_request):
 
 @app.before_server_start
 async def worker_start(_app):
-    openai.api_key = os.getenv('OPENAPI_KEY')
     app.ctx.db = await aiosqlite.connect('../db/myfrontpage.db')
     app.ctx.db.row_factory = aiosqlite.Row
 
@@ -37,4 +35,4 @@ app.blueprint(bp_group)
 
 
 if __name__ == '__main__':
-    app.run(port=8000, access_log=True)
+    app.run(host='0.0.0.0', port=8000, access_log=True, debug=True)

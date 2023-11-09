@@ -4,6 +4,9 @@ function DayWeather(props) {
     return (
         <div>
             <div>
+                天气：{props.weather_desc || props.weather}
+            </div>
+            <div>
                 温度：{props.temp}
             </div>
             <div>
