@@ -5,6 +5,7 @@ import sanic
 from sanic import Sanic, Blueprint
 
 from chatgpt_blueprint import gpt_bp
+from english_blueprint import english_bp
 from news_blueprint import news_bp
 from weather_blueprint import weather_bp
 from websites_navigation_blueprint import websites_bp
@@ -30,9 +31,9 @@ async def worker_start(_app):
     app.ctx.db.row_factory = aiosqlite.Row
 
 
-bp_group = Blueprint.group(weather_bp, websites_bp, news_bp, gpt_bp, url_prefix='/api')
+bp_group = Blueprint.group(weather_bp, websites_bp, news_bp, gpt_bp, english_bp, url_prefix='/api')
 app.blueprint(bp_group)
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, access_log=True, debug=True)
+    app.run(host='0.0.0.0', port=8000, access_log=True)

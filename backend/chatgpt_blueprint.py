@@ -3,7 +3,6 @@ import os
 import time
 import uuid
 
-import openai
 import sanic
 from openai import OpenAIError, OpenAI
 from sanic import Blueprint

@@ -32,7 +32,7 @@ async def get_weather(request):
 
 async def get_current_weather():
     async with httpx.AsyncClient() as client:
-        resp = await client.get(f'https://api.openweathermap.org/data/2.5/weather?lat=23.1167&lon=113.25&appid={open_weather_key}&units=metric')
+        resp = await client.get(f'https://api.openweathermap.org/data/2.5/weather?lat=23.1167&lon=113.25&appid={open_weather_key}&units=metric&lang=zh_cn')
         if resp.status_code != 200:
             return {'ret': resp.status_code, 'desc': 'request error'}
         data = resp.json()
@@ -48,7 +48,7 @@ async def get_current_weather():
 
 async def get_forecast():
     async with httpx.AsyncClient() as client:
-        resp = await client.get(f'https://api.openweathermap.org/data/2.5/forecast?lat=23.1167&lon=113.25&appid={open_weather_key}&units=metric')
+        resp = await client.get(f'https://api.openweathermap.org/data/2.5/forecast?lat=23.1167&lon=113.25&appid={open_weather_key}&units=metric&lang=zh_cn')
         if resp.status_code != 200:
             return {'ret': resp.status_code, 'desc': 'request error'}
         data = resp.json()
