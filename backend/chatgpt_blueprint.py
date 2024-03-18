@@ -23,9 +23,9 @@ async def get_answer(request):
     completion = request.app.ctx.gpt.chat.completions.create(model='gpt-3.5-turbo-16k', messages=[{'role': 'user', 'content': question}], max_tokens=3072)
     answer = completion.choices[0].message
     db = request.app.ctx.db
-    await db.execute(f"insert into chatgpt_history values ('{uuid.uuid4().hex}', '{base64_encode(question)}', '{base64_encode(answer)}', {time.time()})")
+    await db.execute(f"insert into chatgpt_history values ('{uuid.uuid4().hex}', '{base64_encode(question)}', '{base64_encode(answer.content)}', {time.time()})")
     await db.commit()
-    return sanic.json({'ret': 200, 'answer': answer})
+    return sanic.json({'ret': 200, 'answer': answer.content})
 
 
 @gpt_bp.get('/histories/<count:int>')
