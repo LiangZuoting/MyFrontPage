@@ -12,6 +12,7 @@ from websites_navigation_blueprint import websites_bp
 
 app = Sanic('FrontPage')
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+print(root)
 app.static('/', root + '/frontend/build/index.html', name='index')
 app.static('/static', root + '/frontend/build/static', name='static')
 app.static('/manifest.json', root + '/frontend/build/manifest.json', name='manifest')
