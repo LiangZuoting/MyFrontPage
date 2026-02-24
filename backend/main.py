@@ -1,19 +1,25 @@
 import os
 
+import sanic
 from sanic import Sanic
 from tortoise.contrib.sanic import register_tortoise
 
 from api import api
 
 is_prod = os.getenv("MY_FRONTPAGE_SERVER")
+root_dir = os.path.dirname(os.path.abspath(__file__))
 
 app = Sanic("MyFrontpage")
-app.static("/", "dist/index.html", name="index")
-app.static("/vite.svg", "dist/vite.svg", name="vite.svg")
-app.static("/assets", "dist/assets", name="assets")
+app.static("/", f"{root_dir}/dist/index.html", name="index")
+app.static("/vite.svg", f"{root_dir}/dist/vite.svg", name="vite.svg")
 app.blueprint(api)
 
-register_tortoise(app, db_url="sqlite://db/db.sqlite3", modules={"models": ["models"]}, generate_schemas=not is_prod)
+register_tortoise(app, db_url=f"sqlite://{root_dir}/db/db.sqlite3", modules={"models": ["models"]})
+
+
+@app.get("/assets/<f:str>")
+async def get_assets(request, f: str):
+    return await sanic.file(f"{root_dir}/dist/assets/{f}", headers={"content-type": "text/javascript"} if f.endswith(".js") else None)
 
 
 if __name__ == "__main__" and not is_prod:

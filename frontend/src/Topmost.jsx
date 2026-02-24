@@ -14,12 +14,14 @@ export default function Topmost({websites, onUpdate, onDelete}) {
     return (
         <div>
             <h2>常用网址</h2>
-            <Button icon={<AddIcon/>} onClick={handleShowUpdateDialog}>添加</Button>
-            {
-                websites.map(website => (
-                    <Website website={website} key={website.id} onUpdate={onUpdate} onDelete={onDelete} />
-                ))
-            }
+            <div style={{display: "flex"}}>
+                <Button icon={<AddIcon/>} onClick={handleShowUpdateDialog}>添加</Button>
+                {
+                    websites.map(website => (
+                        <Website website={website} key={website.id} onUpdate={onUpdate} onDelete={onDelete} />
+                    ))
+                }
+            </div>
             <UpdateWebsiteDialog visible={showUpdateDialog} onUpdate={onUpdate}/>
         </div>
     )

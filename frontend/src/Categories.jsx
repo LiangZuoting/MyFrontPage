@@ -4,11 +4,13 @@ function Category({category, websites, onUpdate, onDelete}) {
   return (
     <div>
       <h2>{category}</h2>
+      <div style={{display: "flex"}}>
         {
             websites.map(website => (
                 <Website website={website} onUpdate={onUpdate} onDelete={onDelete} />
             ))
         }
+      </div>
     </div>
   );
 }
