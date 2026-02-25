@@ -19,13 +19,18 @@ export default function Website({website, onUpdate, onDelete}) {
         window.open(website.url, "_blank");
     }
 
+    function handleUpdate() {
+        setShowUpdateDialog(false);
+        onUpdate();
+    }
+
   return (
     <div className={"website"}>
         <Button theme={"default"} onClick={openWebsite}>{website.name}</Button>
         <Dropdown onClick={handleDropdown} options={[{content: "更新", value: "update"}, {content: "删除", value: "delete"}]}>
             <Button theme={"default"} variant={"dashed"} icon={<EllipsisIcon/>}></Button>
         </Dropdown>
-        <UpdateWebsiteDialog visible={showUpdateDialog} website={website} onUpdate={onUpdate}/>
+        <UpdateWebsiteDialog visible={showUpdateDialog} website={website} onUpdate={handleUpdate}/>
     </div>
   )
 }

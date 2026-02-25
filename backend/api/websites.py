@@ -26,8 +26,8 @@ async def add_website(request):
     name = data.get("name")
     url = data.get("url")
     category = data.get("category")
-    topmost = data.get("topmost")
-    if not all([name, url, category, topmost]):
+    topmost = data.get("topmost") or False
+    if not all([name, url, category]):
         return sanic.json({"ret": 403})
     await Websites.create(name=name, url=url, category=category, topmost=topmost)
     return sanic.json({"ret": 200})
@@ -38,14 +38,13 @@ async def update_website(request):
     data = request.json
     if data is None:
         return sanic.json({"ret": 403})
-    id = data.get("id")
+    _id = data.get("id")
     name = data.get("name")
     url = data.get("url")
     category = data.get("category")
-    topmost = data.get("topmost")
-    if not all([id, name, url, category, topmost]):
+    if not all([_id, name, url, category]):
         return sanic.json({"ret": 403})
-    await Websites.update_from_dict(data)
+    await Websites.update_or_create(data, None, id=_id)
     return sanic.json({"ret": 200})
 
 

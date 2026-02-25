@@ -31,9 +31,10 @@ export default function UpdateWebsiteDialog({visible, website, onUpdate}) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(e.fields),
+            body: JSON.stringify(website ? {id: website.id, ...e.fields} : e.fields),
         }).then(res => res.json()).then(() => {
             onUpdate();
+            setVisible(false);
         });
     }
 
