@@ -39,7 +39,7 @@ export default function UpdateWebsiteDialog({visible, website, onUpdate}) {
     }
 
     return (
-        <Dialog visible={_visible} header={website ? "更新网址" : "添加网址"} cancelBtn={null} confirmBtn={null} onEscKeydown={cancel} onCloseBtnClick={cancel} onOverlayClick={cancel}>
+        <Dialog visible={_visible} header={website ? "更新网址" : "添加网址"} cancelBtn={null} confirmBtn={null} onEscKeydown={cancel} onCloseBtnClick={cancel} onOverlayClick={cancel} destroyOnClose={true}>
             <Form onSubmit={handleSubmit}>
                 <FormItem label="名称" name={"name"} initialData={website?.name}>
                     <Input maxlength={64}/>

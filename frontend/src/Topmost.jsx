@@ -11,6 +11,11 @@ export default function Topmost({websites, onUpdate, onDelete}) {
         setShowUpdateDialog(true);
     }
 
+    function handleUpdate() {
+        setShowUpdateDialog(false);
+        onUpdate();
+    }
+
     return (
         <div>
             <h2>常用网址</h2>
@@ -22,7 +27,7 @@ export default function Topmost({websites, onUpdate, onDelete}) {
                     ))
                 }
             </div>
-            <UpdateWebsiteDialog visible={showUpdateDialog} onUpdate={onUpdate}/>
+            <UpdateWebsiteDialog visible={showUpdateDialog} onUpdate={handleUpdate}/>
         </div>
     )
 }
