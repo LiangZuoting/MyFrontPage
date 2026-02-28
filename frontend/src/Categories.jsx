@@ -3,7 +3,7 @@ import Website from "./Website.jsx";
 function Category({category, websites, onUpdate, onDelete}) {
   return (
     <div>
-      <h2>{category}</h2>
+      <h3>{category}</h3>
       <div style={{display: "flex"}}>
         {
             websites.map(website => (
@@ -18,6 +18,7 @@ function Category({category, websites, onUpdate, onDelete}) {
 export default function Categories({websites, onUpdate, onDelete}) {
   return (
     <div>
+        <h2>分类网址</h2>
         {
             Object.keys(websites).map(category => (
                 <Category category={category} websites={websites[category]} onUpdate={onUpdate} onDelete={onDelete} />

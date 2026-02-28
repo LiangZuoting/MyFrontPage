@@ -5,29 +5,18 @@ import UpdateWebsiteDialog from "./UpdateWebsiteDialog.jsx";
 import {useState} from "react";
 
 export default function Topmost({websites, onUpdate, onDelete}) {
-    const [showUpdateDialog, setShowUpdateDialog] = useState(false);
-
-    function handleShowUpdateDialog() {
-        setShowUpdateDialog(true);
-    }
-
-    function handleUpdate() {
-        setShowUpdateDialog(false);
-        onUpdate();
-    }
 
     return (
         <div>
             <h2>常用网址</h2>
             <div style={{display: "flex"}}>
-                <Button icon={<AddIcon/>} onClick={handleShowUpdateDialog}>添加</Button>
+                <Button icon={<AddIcon/>} onClick={()=>{onUpdate(null);}}>添加</Button>
                 {
                     websites.map(website => (
                         <Website website={website} key={website.id} onUpdate={onUpdate} onDelete={onDelete} />
                     ))
                 }
             </div>
-            <UpdateWebsiteDialog visible={showUpdateDialog} onUpdate={handleUpdate}/>
         </div>
     )
 }

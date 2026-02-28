@@ -1,4 +1,5 @@
+from .news import news
 from .websites import websites
 from sanic import Blueprint
 
-api = Blueprint.group(websites, url_prefix="/api")
+api = Blueprint.group(news, websites, url_prefix="/api")

@@ -8,12 +8,15 @@ websites = Blueprint("websites", url_prefix="/websites")
 
 @websites.get("/")
 async def get_all_websites(request):
+    nsfw = request.args.get("nsfw") == "1"
     all_websites = Websites.all()
     topmost = await Websites.filter(topmost=True)
     topmost = [wb.to_dict() for wb in topmost]
     categories = await all_websites.distinct().values_list("category", flat=True)
     categorical_websites = {}
     for category in categories:
+        if not nsfw and category == "NSFW":
+            continue
         categorical_websites[category] = [wb.to_dict() for wb in await all_websites.filter(category=category)]
     return sanic.json({"topmost": topmost, "categories": categorical_websites})
 
